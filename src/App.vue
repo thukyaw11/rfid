@@ -2,13 +2,6 @@
   <div id="app">
     <HelloWorld />
     <div class="container">
-      <a-alert
-        :class="[this.alert_display?'diplayBlock':'displayNone']"
-        message="Deleted Successfully!"
-        type="error"
-        showIcon
-      />
-      
       <div class="row mt-3 mb-5">
         <div class="col-12" v-for="data in datas" v-bind:key="data.uitID">
           <div class="dataContainer mt-2">
@@ -16,7 +9,7 @@
             <p class="father_name">Father Name - {{data.fatherName}}</p>
             <p class="student_id">UIT - {{data.id}}</p>
             <h6>
-              <b>Log history </b>
+              <b>Log history</b>
             </h6>
             <br />
             <div class="logHistory" v-for="history in data.history" v-bind:key="history">
@@ -42,7 +35,6 @@
     <div id="buttonReg">
       <CollectionCreateForm />
     </div>
-    
   </div>
 </template>
 
@@ -50,7 +42,7 @@
 import axios from "axios";
 import HelloWorld from "./components/NavBar.vue";
 import CollectionCreateForm from "./components/CollectionCreateForm.vue";
-import * as moment from 'moment';
+import * as moment from "moment";
 
 export default {
   name: "App",
@@ -61,35 +53,43 @@ export default {
   data() {
     return {
       datas: "",
-      alert_display: false,
       visible: false,
-      parsedDate : [],
-      toParse : ''
+      parsedDate: [],
+      toParse: "",
+      interval : ""
     };
-  },
-  mounted() {
-    axios.get("https://scapi.now.sh/api/read").then(res => {
-      this.datas = res.data;
-      this.setData(res.data);
-    
-    })
-    .catch(error=>console.log(error));
-    console.log(this.parsedDate);
-  },
+  }, // in your created hook
+      created() {
+        this.interval = setInterval(this.refreshData, 500);
+      },
+      beforeDestroy() {
+        clearInterval(this.interval);
+      },
+
+
   methods: {
-    setData(data){
-      this.datas = data;
+    refreshData() {
+    axios
+      .get("https://scapi.now.sh/api/read")
+      .then(res => {
+        this.datas = res.data.slice().reverse();
+        this.setData(res.data);
+      })
+      .catch(error => console.log(error)); 
+    },
+    
+    setData(data) {
+      this.datas = data.slice().reverse();
       this.datas.forEach(element => {
-          this.toParse = element.history.getHours();
-          // this.parsedDate.push(element.history.getHours());
-          console.log(moment().format(this.toParse));
+        this.toParse = element.history;
+        // this.parsedDate.push(element.history.getHours());
+        console.log(moment().format(this.toParse));
       });
     },
     confirm(uitID) {
       console.log(uitID);
       const delete_apiUrl = `https://scapi.now.sh/api/delete?searchid=${uitID}`;
       this.deleteToApi(delete_apiUrl);
-      this.deleteDoneMessage();
     },
     deleteToApi(delete_apiUrl) {
       axios.delete(delete_apiUrl).then(function(respones) {
@@ -99,13 +99,6 @@ export default {
     },
     cancel(e) {
       console.log(e);
-    },
-    deleteDoneMessage() {
-      this.alert_display = true;
-      setTimeout(() => {
-        this.alert_display = false;
-        window.location.reload();
-      }, 1000);
     }
   }
 };

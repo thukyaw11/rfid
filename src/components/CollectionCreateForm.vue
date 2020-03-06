@@ -95,7 +95,11 @@ export default {
       setTimeout(() => {
         this.alert_display = false;
       }, 2000);
-      window.location.reload();
+
+      this.name = "";
+      this.fatherName = "";
+      this.uitID = "";
+
     }
   }
 };

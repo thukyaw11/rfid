@@ -11,9 +11,14 @@ import Input from 'ant-design-vue/lib/input';
 import InputNumber from 'ant-design-vue/lib/input-number';
 import Alert from 'ant-design-vue/lib/alert';
 import PopConfirm from 'ant-design-vue/lib/popconfirm';
+import VueMaterial from 'vue-material'
+import 'vue-material/dist/vue-material.min.css'
+import 'vue-material/dist/theme/default.css'
 import './registerServiceWorker'
+import 'moment';
 
 Vue.config.productionTip = false
+Vue.use(require('vue-moment'));
 Vue.use(axios);
 Vue.use(Button);
 Vue.use(Icon);
@@ -24,6 +29,7 @@ Vue.use(Input);
 Vue.use(Alert);
 Vue.use(InputNumber);
 Vue.use(PopConfirm);
+Vue.use(VueMaterial);
 new Vue({
 
   render: h => h(App),

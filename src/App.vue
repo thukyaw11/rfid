@@ -8,6 +8,7 @@
         type="error"
         showIcon
       />
+      
       <div class="row mt-3 mb-5">
         <div class="col-12" v-for="data in datas" v-bind:key="data.uitID">
           <div class="dataContainer mt-2">
@@ -15,11 +16,11 @@
             <p class="father_name">Father Name - {{data.fatherName}}</p>
             <p class="student_id">UIT - {{data.id}}</p>
             <h6>
-              <b>Log history</b>
+              <b>Log history </b>
             </h6>
             <br />
             <div class="logHistory" v-for="history in data.history" v-bind:key="history">
-              <p>{{history}}</p>
+              <p>{{ history | moment("dddd, MMMM Do YYYY, h:mm:ss a") }}</p>
             </div>
 
             <a-popconfirm
@@ -41,6 +42,7 @@
     <div id="buttonReg">
       <CollectionCreateForm />
     </div>
+    
   </div>
 </template>
 
@@ -48,6 +50,7 @@
 import axios from "axios";
 import HelloWorld from "./components/NavBar.vue";
 import CollectionCreateForm from "./components/CollectionCreateForm.vue";
+import * as moment from 'moment';
 
 export default {
   name: "App",
@@ -59,17 +62,29 @@ export default {
     return {
       datas: "",
       alert_display: false,
-      visible: false
+      visible: false,
+      parsedDate : [],
+      toParse : ''
     };
   },
   mounted() {
     axios.get("https://scapi.now.sh/api/read").then(res => {
       this.datas = res.data;
-    });
-
-    console.log(this.datas);
+      this.setData(res.data);
+    
+    })
+    .catch(error=>console.log(error));
+    console.log(this.parsedDate);
   },
   methods: {
+    setData(data){
+      this.datas = data;
+      this.datas.forEach(element => {
+          this.toParse = element.history.getHours();
+          // this.parsedDate.push(element.history.getHours());
+          console.log(moment().format(this.toParse));
+      });
+    },
     confirm(uitID) {
       console.log(uitID);
       const delete_apiUrl = `https://scapi.now.sh/api/delete?searchid=${uitID}`;
@@ -107,7 +122,7 @@ export default {
   border-radius: 5px;
   padding: 30px;
   color: black;
-  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.19), 0 4px 4px rgba(0, 0, 0, 0.23);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.19), 0 1px 1px rgba(0, 0, 0, 0.23);
 }
 
 #buttonReg {

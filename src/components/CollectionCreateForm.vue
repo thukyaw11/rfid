@@ -8,7 +8,11 @@
     />
     <div>
       <br />
-      <a-button type="primary" shape="round" @click="showModal">Add new</a-button>
+      <md-button class="md-fab md-icon-button md-raised md-primary" @click="showModal">
+        <md-icon>+</md-icon>
+      </md-button>
+
+
 
       <!-- modal -->
       <a-modal

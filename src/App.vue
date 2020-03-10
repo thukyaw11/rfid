@@ -31,7 +31,7 @@
         </div>
       </div>
 
-      <div class="row">
+      <div class="row" v-else>
         <div class="center-block" style="text-align:center;">
           <span>
             <a-icon type="loading" :style="{ fontSize: '150px', color: '#08c'}" />

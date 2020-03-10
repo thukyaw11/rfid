@@ -15,10 +15,12 @@ import VueMaterial from 'vue-material'
 import 'vue-material/dist/vue-material.min.css'
 import 'vue-material/dist/theme/default.css'
 import './registerServiceWorker'
-import 'moment';
+// import dateFormat from 'dateformat';
 
-Vue.config.productionTip = false
-Vue.use(require('vue-moment'));
+Vue.config.productionTip = false;
+
+
+// Vue.use(dateFormat);
 Vue.use(axios);
 Vue.use(Button);
 Vue.use(Icon);
